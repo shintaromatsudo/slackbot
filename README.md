@@ -21,18 +21,3 @@ sudo snap install docker
 sudo docker build ./ -t slackbot
 sudo docker run -itd --name slackbot -p 8080:8080 slackbot
 ```
-
-
-
-
-
-curl -X POST -H "Authorization: Bearer xoxb-170884278241-4218562581984-edpsutUCT74L7GtNSYXUszaI" \
-    -H "Content-type: application/json" \
-    --data '{"text" : "Hello World", "channel" : "C03F8QRLYUC", "thread_ts": "1666197586.071719"}' \
-    https://slack.com/api/chat.postMessage
-
-
-curl -X POST -H "Content-Type: application/json" -d '{"event": {"channel": "D011Q70BHD3"}, "token": "7qKc3W5jMAhqg6N1Hrig5v5k"}' localhost:8080/slackbot
-
-
-curl -X POST -H "Content-Type: application/json" -d '{"event": {"channel": "C03F8QRLYUC", "text": "happy", "thread_ts": "1666197586.071719", "user": "U046EGJH3UY"}, "token": "7qKc3W5jMAhqg6N1Hrig5v5k"}' localhost:8080/slackbot
