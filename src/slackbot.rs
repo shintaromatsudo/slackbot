@@ -46,10 +46,8 @@ pub struct ResJson {
 pub async fn slackbot(Json(req): Json<ReqJson>) -> (StatusCode, Json<ResJson>) {
     tracing::info!("slackbot: {:?}", req);
 
-    let verification_token = "7qKc3W5jMAhqg6N1Hrig5v5k";
-    // let verification_token = env::var("VERIFICATION_TOKEN").expect("VERIFICATION_TOKEN must be set");
-    let bot_user = "U046EGJH3UY";
-    // let bot_user = env::var("BOT_USER").expect("BOT_USER must be set");
+    let verification_token = env::var("VERIFICATION_TOKEN").expect("VERIFICATION_TOKEN must be set");
+    let bot_user = env::var("BOT_USER").expect("BOT_USER must be set");
 
     if req.token != verification_token {
         tracing::warn!("AuthenticationFailed, token: {}", req.token);
@@ -77,8 +75,7 @@ pub async fn slackbot(Json(req): Json<ReqJson>) -> (StatusCode, Json<ResJson>) {
 
 async fn post_message(event: Event) -> reqwest::Result<()> {
     tracing::info!("post_message, event: {:?}", event);
-    let bot_user_oauth_token = "xoxb-170884278241-4218562581984-edpsutUCT74L7GtNSYXUszaI";
-    // let bot_user_oauth_token = env::var("BOT_USER_OAUTH_TOKEN").expect("BOT_USER_OAUTH_TOKEN must be set");
+    let bot_user_oauth_token = env::var("BOT_USER_OAUTH_TOKEN").expect("BOT_USER_OAUTH_TOKEN must be set");
 
     let mut post_body = json!({
         "text": format!("happy {:?}", event.text.unwrap_or("".to_string())),
