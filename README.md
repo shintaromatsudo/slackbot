@@ -16,16 +16,23 @@ export PATH="$HOME/.cargo/bin:$PATH"
 cargo new slackbot --bin
 cd slackbot
 
-sudo apt-get update
-sudo apt-get install -y gcc build-essential pkg-config libssl-dev
-sudo apt install nginx
-sudo vi /etc/nginx/sites-available/default
-sudo systemctl restart nginx
-location / {
-                proxy_pass http://localhost:8080;
-        }
+sudo yum update -y
+sudo amazon-linux-extras install -y docker
+sudo systemctl start docker
+sudo yum install -y gcc build-essential pkg-config libssl-dev
 
-sudo snap install docker
+sudo amazon-linux-extras install nginx1
+sudo vi /etc/nginx/nginx.conf
+location / {
+    proxy_pass http://localhost:8080;
+}
+sudo systemctl restart nginx
+
+scp -i "~/.ssh/shintaromatsudo.pem" -r ./Dockerfile ec2-user@ec2-18-181-208-35.ap-northeast-1.compute.amazonaws.com:~/slackbot/ 
+scp -i "~/.ssh/shintaromatsudo.pem" -r ./Cargo.toml ec2-user@ec2-18-181-208-35.ap-northeast-1.compute.amazonaws.com:~/slackbot/ 
+scp -i "~/.ssh/shintaromatsudo.pem" -r ./.env ec2-user@ec2-18-181-208-35.ap-northeast-1.compute.amazonaws.com:~/slackbot/ 
+scp -i "~/.ssh/shintaromatsudo.pem" -r ./src ec2-user@ec2-18-181-208-35.ap-northeast-1.compute.amazonaws.com:~/slackbot/ 
+
 sudo docker build ./ -t slackbot
 sudo docker run -itd --name slackbot -p 8080:8080 slackbot
 ```

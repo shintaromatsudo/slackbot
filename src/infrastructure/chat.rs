@@ -1,5 +1,6 @@
 use std::env;
 use serde::{Serialize};
+use regex::Regex;
 
 use crate::serializer::event::Event;
 
@@ -16,20 +17,22 @@ pub async fn post_message(event: Event) -> reqwest::Result<()> {
     let url = "https://slack.com/api/chat.postMessage";
 
     match (event.channel, event.text, event.thread_ts) {
-        (Some(channel), Some(text), Some(thread_ts)) => {
+        (Some(channel), Some(text), None) =>{
+            let caps_text = capture_text(&text);
             let post_body = PostBody {
-                text: format!("Thank you {:?}", text.to_string()),
-                channel: channel.to_string(),
-                thread_ts: Some(thread_ts.to_string()),
+                text: String::from("Thank you ") + caps_text,
+                channel,
+                thread_ts: None,
             };
 
             let res = post_request(url, post_body).await;
         },
-        (Some(channel), Some(text), None) =>{
+        (Some(channel), Some(text), Some(thread_ts)) => {
+            let caps_text = capture_text(&text);
             let post_body = PostBody {
-                text: format!("Thank you {:?}", text.to_string()),
-                channel: channel.to_string(),
-                thread_ts: None,
+                text: String::from("Thank you ") + caps_text,
+                channel,
+                thread_ts: Some(thread_ts),
             };
 
             let res = post_request(url, post_body).await;
@@ -42,7 +45,13 @@ pub async fn post_message(event: Event) -> reqwest::Result<()> {
         (Some(_), None, Some(_)) => todo!(),
     }
 
-    return Ok(())
+    Ok(())
+}
+
+fn capture_text(text: &str) -> &str {
+    let re = Regex::new(r"<@.*>").unwrap();
+    let caps = re.captures(&text).unwrap();
+    return caps.get(0).unwrap().as_str();
 }
 
 async fn post_request(url: &str, post_body: PostBody<>) -> reqwest::Result<()> {

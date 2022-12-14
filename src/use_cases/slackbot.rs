@@ -4,6 +4,7 @@ use axum::{
     Json
 };
 use serde::{Serialize};
+use regex::Regex;
 
 use crate::infrastructure::chat;
 use crate::serializer::request::Request;
@@ -34,7 +35,15 @@ pub async fn slackbot(Json(req): Json<Request>) -> (StatusCode, Json<ResJson>) {
                         return (StatusCode::BAD_REQUEST, Json(ResJson {ok: false, challenge: None }));
                     }
 
-                    let res = chat::post_message(e).await;
+                    match &e.text {
+                        Some(text) => {
+                            let is_match = match_text(&text);
+                            if is_match {
+                                let res = chat::post_message(e).await;
+                            }
+                        }
+                        None => todo!(),
+                    }
                     return (StatusCode::OK, Json(ResJson {ok: true, challenge: None }))
                 },
                 None => return (StatusCode::BAD_REQUEST, Json(ResJson {ok: false, challenge: None })),
@@ -45,5 +54,14 @@ pub async fn slackbot(Json(req): Json<Request>) -> (StatusCode, Json<ResJson>) {
             tracing::debug!("{:?}", res);
             (StatusCode::OK, Json(res))
         }
+    }
+}
+
+fn match_text(text: &str) -> bool {
+    let plusplus = Regex::new(r"^.*\+\+.*$").unwrap();
+    if plusplus.is_match(text) {
+        return true
+    } else {
+        return false
     }
 }
