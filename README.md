@@ -1,5 +1,13 @@
 # slackbot
 
+## 開発環境構築
+cp .env.example .env
+
+cargo run
+
+docker build ./ -t slackbot
+docker run -itd --name slackbot -p 8080:8080 slackbot
+
 ## EC2環境構築
 ```
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
