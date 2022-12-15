@@ -4,8 +4,6 @@ use crate::serializer::post_body::PostBody;
 
 
 pub async fn post_message(post_body: PostBody<>) -> reqwest::Result<()> {
-    tracing::info!("post_message, post_body: {:?}", post_body);
-
     let url = "https://slack.com/api/chat.postMessage";
 
     let res = post_request(url, post_body).await;
@@ -14,7 +12,7 @@ pub async fn post_message(post_body: PostBody<>) -> reqwest::Result<()> {
 }
 
 async fn post_request(url: &str, post_body: PostBody<>) -> reqwest::Result<()> {
-    tracing::debug!("post_request, post_body: {:?}", post_body);
+    tracing::info!("post_request, url: {:?}, post_body: {:?}",url, post_body);
 
     let bot_user_oauth_token = env::var("BOT_USER_OAUTH_TOKEN").expect("BOT_USER_OAUTH_TOKEN must be set");
 
@@ -26,7 +24,7 @@ async fn post_request(url: &str, post_body: PostBody<>) -> reqwest::Result<()> {
         .send()
         .await?;
 
-    tracing::debug!("{:?}", response.status());
+    // tracing::debug!("{:?}", response.status());
     tracing::debug!("{:?}", response.text().await?);
 
     Ok(())
