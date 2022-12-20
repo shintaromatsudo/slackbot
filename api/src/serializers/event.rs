@@ -1,14 +1,10 @@
-use serde::{Deserialize};
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Event {
-    r#type: Option<String>,
     pub channel: Option<String>,
     pub user: String,
     pub text: Option<String>,
-    ts: Option<String>,
-    event_ts: Option<String>,
-    channel_type: Option<String>,
     pub thread_ts: Option<String>,
 }
 
