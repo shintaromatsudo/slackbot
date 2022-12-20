@@ -1,4 +1,6 @@
-# slackbot
+# Rust で Slackbot 開発
+
+[株式会社RevComm Advent Calendar 2022](https://qiita.com/advent-calendar/2022/revcomm) に書かれた記事「Rust で Slackbot 開発」のチュートリアルのソースコードです。記事からこのレポジトリはリンクされています。
 
 ## EC2環境構築
 ```
@@ -37,6 +39,6 @@ sea-orm-cli migrate up
 docker exec -it slackbot-db-1 bash
 psql -U postgres
 
-<!-- docker build ./ -t slackbot
-docker run -it --name slackbot -p 8080:8080 slackbot -->
+<!-- docker build ./ -t slackbot -->
+<!-- docker run -it --name slackbot -p 8080:8080 slackbot -->
 ```
