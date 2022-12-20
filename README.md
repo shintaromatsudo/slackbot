@@ -1,6 +1,4 @@
-# Rust で Slackbot 開発
-
-[株式会社RevComm Advent Calendar 2022](https://qiita.com/advent-calendar/2022/revcomm) に書かれた記事「Rust で Slackbot 開発」のチュートリアルのソースコードです。記事からこのレポジトリはリンクされています。
+# Slackbot
 
 ## EC2環境構築
 ```
